@@ -23,9 +23,10 @@ def go(args):
     df = loading_data(artifact_local_path)
     df = drop_price_outliers(args, df)
 
-    drop_lat_lon_outliers(df)
+    df = drop_lat_lon_outliers(df)
 
     convert_lastreview_datetime(df)
+
     df.to_csv(args.output_artifact, index=False)
 
     artifact = wandb.Artifact(
@@ -43,7 +44,7 @@ def convert_lastreview_datetime(df):
 
 def drop_lat_lon_outliers(df):
     idx = df["longitude"].between(-74.25, -73.50) & df["latitude"].between(40.5, 41.2)
-    df = df[idx].copy()
+    return df[idx].copy()
 
 
 def drop_price_outliers(args, df):
